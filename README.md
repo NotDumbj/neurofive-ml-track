@@ -1,7 +1,7 @@
-# Titanic Dataset - Exploratory Data Analysis (EDA)
-> **Neurofive ML Track — Task 1**
+# Titanic Dataset - Exploratory Data Analysis & Data Cleaning
+> **Neurofive ML Track — Tasks 1 & 2**
 
-An initial data profiling and exploratory analysis of the classic Kaggle Titanic dataset. This repository establishes the baseline environment, data loading patterns, and preliminary findings before applying machine learning algorithms.
+This repository contains the exploratory data analysis (EDA), data cleaning pipeline, and visual diagnostics for the classic Kaggle Titanic dataset. It establishes a baseline workflow for data preprocessing before training machine learning models.
 
 ---
 
@@ -9,7 +9,7 @@ An initial data profiling and exploratory analysis of the classic Kaggle Titanic
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`
 * **Version Control:** Git & GitHub
 
 ---
@@ -22,14 +22,20 @@ An initial data profiling and exploratory analysis of the classic Kaggle Titanic
 
 ---
 
-## 🔍 Key EDA Findings ("Data Story")
+## 🧹 Data Cleaning & Preprocessing Strategy (Task 2)
 
-* **Class Distribution & Survival Rate:** The average survival rate across the training set is **~38.4%**.
-* **Missing Value Profile:**
-  * `Cabin`: Highly sparse; missing the vast majority of entries (~77%). Requires dropping or deck feature extraction.
-  * `Age`: Missing ~20% of values. Requires an imputation strategy (e.g., median by Pclass/Sex) prior to modeling.
-  * `Embarked`: Missing only 2 values, which can easily be imputed using the mode.
-* **Feature Skewness:** The `Fare` feature exhibits extreme right-skewness, ranging from `$0.00` to a maximum outlier of `$512.33`, reflecting distinct class/ticket tier distributions.
+1. **`Age` Imputation:** Missing values (~20%) were filled using the column **median**. Median was preferred over mean because the age distribution exhibits slight right-skewness, making the median more resilient to extreme values.
+2. **`Embarked` Imputation:** Missing values (2 records) were filled using the **mode** (`'S'`), preserving categorical integrity without altering class proportions.
+3. **`Cabin` Removal:** Over 77% of `Cabin` entries were missing. The feature was dropped entirely to prevent introducing synthetic noise.
+4. **Outlier Identification:** Boxplot profiling on `Fare` revealed severe right-skewness and outliers ranging beyond `$500`. These entries reflect high-tier first-class suites and combined family tickets rather than bad data.
+
+---
+
+## 📈 Key Visual Insights ("Data Story")
+
+* **Primary Survival Driver (`Sex`):** Visualizing survival rate by gender reveals that females had a **~74%** survival probability compared to **~19%** for males, demonstrating the strong impact of the "women and children first" evacuation protocol.
+* **Socioeconomic Influence (`Pclass`):** Passenger class serves as a strong secondary predictor. First-class passengers achieved higher survival rates due to proximity to the upper deck and priority lifeboat access.
+* **Correlation Highlights:** Strong negative correlation exists between `Pclass` and `Fare`, confirming that higher fare values strongly map to tier 1 accommodations.
 
 ---
 
@@ -42,15 +48,11 @@ cd neurofive-ml-track
 ### 2. Set Up Virtual Environment
 python -m venv ml_env
 
-# On Windows (Git Bash):
+# Activate Environment (Git Bash):
 source ml_env/bin/activate
-# On Linux/macOS:
-source ml_env/bin/activate
-# On Windows (CMD):
-ml_env\Scripts\activate
 
 ### 3. Install Dependencies & Launch
-pip install pandas numpy jupyter
+pip install pandas numpy matplotlib seaborn jupyter
 jupyter notebook
 
 ---
@@ -59,5 +61,5 @@ jupyter notebook
 
 neurofive-ml-track/
 ├── .gitignore          # Excludes ml_env, checkpoints, and raw CSVs
-├── main.ipynb          # Primary EDA notebook with profiling output
+├── main.ipynb          # Notebook containing Task 1 & Task 2 code
 └── README.md           # Project documentation
