@@ -1,7 +1,7 @@
-# Titanic Dataset - Exploratory Data Analysis (EDA)
-> **Neurofive ML Track — Task 1**
+# Titanic Dataset - Machine Learning Pipeline
+> **Neurofive ML Track — Tasks 1, 2 & 3**
 
-An initial data profiling and exploratory analysis of the classic Kaggle Titanic dataset. This repository establishes the baseline environment, data loading patterns, and preliminary findings before applying machine learning algorithms.
+This repository tracks the complete end-to-end data science lifecycle on the Kaggle Titanic dataset, covering exploratory data analysis, data cleaning, feature encoding, and baseline classification modeling.
 
 ---
 
@@ -9,49 +9,49 @@ An initial data profiling and exploratory analysis of the classic Kaggle Titanic
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`
 * **Version Control:** Git & GitHub
 
 ---
 
-## 📊 Dataset Overview
+## 🤖 Model Implementation (Task 3)
 
-* **Source:** Kaggle (*Titanic - Machine Learning from Disaster*)
-* **Scale:** 891 rows, 12 columns
-* **Target Feature:** `Survived` (Binary classification: `0` = No, `1` = Yes)
+### Pipeline Steps
+1. **Categorical Encoding:** Converted categorical variables (`Sex`, `Embarked`) using One-Hot Encoding (`pd.get_dummies(drop_first=True)`).
+2. **Train-Test Split:** Partitioned the dataset into 80% training and 20% test subsets using stratified sampling to maintain class proportions.
+3. **Feature Scaling:** Applied `StandardScaler` to normalize continuous distributions (`Age`, `Fare`) prior to training.
+4. **Baseline Algorithm:** Trained a **Logistic Regression** model on scaled features.
 
----
-
-## 🔍 Key EDA Findings ("Data Story")
-
-* **Class Distribution & Survival Rate:** The average survival rate across the training set is **~38.4%**.
-* **Missing Value Profile:**
-  * `Cabin`: Highly sparse; missing the vast majority of entries (~77%). Requires dropping or deck feature extraction.
-  * `Age`: Missing ~20% of values. Requires an imputation strategy (e.g., median by Pclass/Sex) prior to modeling.
-  * `Embarked`: Missing only 2 values, which can easily be imputed using the mode.
-* **Feature Skewness:** The `Fare` feature exhibits extreme right-skewness, ranging from `$0.00` to a maximum outlier of `$512.33`, reflecting distinct class/ticket tier distributions.
+### Performance & Evaluation
+* **Test Set Accuracy:** **~80%**
+* **Evaluation Metric:** Evaluated using `accuracy_score` and `confusion_matrix`. The model effectively leverages `Sex` and `Pclass` to separate binary survival outcomes with balanced true positive/negative ratios.
 
 ---
 
 ## 🚀 Getting Started Locally
 
 ### 1. Clone the Repository
-git clone https://github.com/notdumbj/neurofive-ml-track.git
+```bash
+git clone [https://github.com/notdumbj/neurofive-ml-track.git](https://github.com/notdumbj/neurofive-ml-track.git)
 cd neurofive-ml-track
+```
 
 ### 2. Set Up Virtual Environment
+```bash
 python -m venv ml_env
 
 # On Windows (Git Bash):
 source ml_env/bin/activate
-# On Linux/macOS:
-source ml_env/bin/activate
+
 # On Windows (CMD):
 ml_env\Scripts\activate
+```
 
 ### 3. Install Dependencies & Launch
-pip install pandas numpy jupyter
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn jupyter
 jupyter notebook
+```
 
 ---
 
@@ -59,5 +59,7 @@ jupyter notebook
 
 neurofive-ml-track/
 ├── .gitignore          # Excludes ml_env, checkpoints, and raw CSVs
-├── main.ipynb          # Primary EDA notebook with profiling output
+├── main.ipynb          # Notebook containing EDA, cleaning, and model training
 └── README.md           # Project documentation
+
+---
