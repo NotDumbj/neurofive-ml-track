@@ -49,7 +49,7 @@ This repository tracks the complete end-to-end data science lifecycle on the Kag
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/notdumbj/neurofive-ml-track.git](https://github.com/notdumbj/neurofive-ml-track.git)
+git clone https://github.com/notdumbj/neurofive-ml-track.git
 cd neurofive-ml-track
 ```
 
@@ -67,7 +67,6 @@ ml_env\Scripts\activate
 ### 3. Install Dependencies & Launch
 ```bash
 pip install pandas numpy matplotlib seaborn scikit-learn jupyter
-
 jupyter notebook
 ```
 
