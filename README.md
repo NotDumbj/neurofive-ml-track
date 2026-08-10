@@ -1,7 +1,7 @@
-# NeuroFive ML Track — Week 1
+# NeuroFive ML Track — Weeks 1 & 2
 > Machine Learning fundamentals through hands-on projects
 
-This repository contains Week 1 projects from the NeuroFive ML track, covering supervised learning techniques on real-world datasets.
+This repository contains projects from the NeuroFive ML track, covering supervised learning techniques on real-world datasets.
 
 ---
 
@@ -12,12 +12,23 @@ This repository contains Week 1 projects from the NeuroFive ML track, covering s
 
 End-to-end ML pipeline on the Kaggle Titanic dataset covering EDA, data cleaning, feature encoding, and logistic regression classification. Achieves ~80% test accuracy.
 
-**Tasks covered:** Tasks 1, 2 & 3
+**Tasks covered:** Tasks 1 & 2 (Week 1), Task 3 (Week 2)
 
 ### 2. California Housing Linear Regression
 `California Housing Linear Regression/`
 
-*(Coming soon)*
+Linear Regression model predicting California housing prices using scikit-learn's built-in California Housing dataset. Uses a 4-feature subset (`MedInc`, `HouseAge`, `AveRooms`, `Population`) to predict median house values, achieving an R² of ~0.50.
+
+**Task covered:** Task 4 (Week 2)
+
+---
+
+## Week Overview
+
+| Week | Tasks | Project |
+|------|-------|---------|
+| Week 1 | Tasks 1 & 2 | Titanic — EDA & Data Cleaning |
+| Week 2 | Tasks 3 & 4 | Titanic — Logistic Regression & California Housing — Linear Regression |
 
 ---
 
@@ -54,7 +65,7 @@ source ml_env/bin/activate
 ### 3. Install Dependencies & Launch
 ```bash
 pip install pandas numpy matplotlib seaborn scikit-learn jupyter
-cd "Titanic Logistic Regression"
+cd "Titanic Logistic Regression"    # or "California Housing Linear Regression"
 jupyter notebook
 ```
 
@@ -72,7 +83,7 @@ neurofive-ml-track/
 │   │   └── .gitkeep
 │   └── main.ipynb
 └── California Housing Linear Regression/
-    └── .gitkeep
+    └── main.ipynb
 ```
 
 ---
@@ -103,3 +114,22 @@ neurofive-ml-track/
 #### Performance & Evaluation
 * **Test Set Accuracy:** **~80%**
 * **Evaluation Metric:** Evaluated using `accuracy_score` and `confusion_matrix`. The model effectively leverages `Sex` and `Pclass` to separate binary survival outcomes with balanced true positive/negative ratios.
+
+---
+
+## California Housing Linear Regression — Detail
+
+### Dataset
+* **Source:** `sklearn.datasets.fetch_california_housing` (built-in, no download required)
+* **Size:** 20,640 samples, 8 features + 1 target
+* **Target:** `MedHouseVal` — median house value (scaled to dollars)
+
+### Pipeline Steps (Task 4)
+1. **Feature Selection:** Selected 4 features — `MedInc`, `HouseAge`, `AveRooms`, `Population`.
+2. **Target Scaling:** Multiplied `MedHouseVal` by 100,000 to convert to dollar units.
+3. **Train-Test Split:** 80/20 split with `random_state=42`.
+4. **Algorithm:** Trained a **Linear Regression** model via `sklearn.linear_model.LinearRegression`.
+
+### Performance & Evaluation
+* **RMSE:** **$81,104.84**
+* **R² Score:** **~0.50** — the model explains 49% of the variance in house prices using the selected 4-feature subset. The remaining variance is attributed to factors not included (e.g., proximity to the ocean, property condition).
