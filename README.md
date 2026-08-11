@@ -68,7 +68,7 @@ jupyter notebook
 ---
 
 ## Repository Structure
-
+```
 neurofive-ml-track/
 ├── .gitignore
 ├── README.md
@@ -79,7 +79,7 @@ neurofive-ml-track/
 │   └── main.ipynb                           # Notebook containing Tasks 1-3 & Task 5
 └── California Housing Linear Regression/
     └── main.ipynb                           # Notebook containing Task 4
-
+```
 ---
 
 ## Titanic Logistic Regression & Hyperparameter Tuning — Detail
