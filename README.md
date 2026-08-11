@@ -1,18 +1,18 @@
-# NeuroFive ML Track — Weeks 1 & 2
+# NeuroFive ML Track — Weeks 1, 2 & 3
 > Machine Learning fundamentals through hands-on projects
 
-This repository contains projects from the NeuroFive ML track, covering supervised learning techniques on real-world datasets.
+This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, and hyperparameter tuning on real-world datasets.
 
 ---
 
 ## Projects
 
-### 1. Titanic Logistic Regression
+### 1. Titanic Logistic Regression & Model Tuning
 `Titanic Logistic Regression/`
 
-End-to-end ML pipeline on the Kaggle Titanic dataset covering EDA, data cleaning, feature encoding, and logistic regression classification. Achieves ~80% test accuracy.
+End-to-end ML pipeline on the Kaggle Titanic dataset covering EDA, data cleaning, feature encoding, baseline logistic regression classification, and systematic hyperparameter tuning using `GridSearchCV`.
 
-**Tasks covered:** Tasks 1 & 2 (Week 1), Task 3 (Week 2)
+**Tasks covered:** Tasks 1 & 2 (Week 1), Task 3 (Week 2), Task 5 (Week 3)
 
 ### 2. California Housing Linear Regression
 `California Housing Linear Regression/`
@@ -25,10 +25,11 @@ Linear Regression model predicting California housing prices using scikit-learn'
 
 ## Week Overview
 
-| Week | Tasks | Project |
-|------|-------|---------|
-| Week 1 | Tasks 1 & 2 | Titanic — EDA & Data Cleaning |
-| Week 2 | Tasks 3 & 4 | Titanic — Logistic Regression & California Housing — Linear Regression |
+| Week | Tasks | Project | Focus Areas |
+|------|-------|---------|-------------|
+| Week 1 | Tasks 1 & 2 | Titanic | EDA, Data Profiling, Outliers & Missing Value Imputation |
+| Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
+| Week 3 | Task 5 | Titanic | Beyond Accuracy (Precision, Recall, F1), GridSearchCV Hyperparameter Tuning |
 
 ---
 
@@ -44,13 +45,10 @@ Linear Regression model predicting California housing prices using scikit-learn'
 ## Getting Started Locally
 
 ### 1. Clone the Repository
-```bash
 git clone https://github.com/notdumbj/neurofive-ml-track.git
 cd neurofive-ml-track
-```
 
 ### 2. Set Up Virtual Environment
-```bash
 python -m venv ml_env
 
 # On Windows (Git Bash):
@@ -61,19 +59,16 @@ ml_env\Scripts\activate
 
 # On Linux/macOS:
 source ml_env/bin/activate
-```
+
 ### 3. Install Dependencies & Launch
-```bash
 pip install pandas numpy matplotlib seaborn scikit-learn jupyter
 cd "Titanic Logistic Regression"    # or "California Housing Linear Regression"
 jupyter notebook
-```
 
 ---
 
 ## Repository Structure
 
-```
 neurofive-ml-track/
 ├── .gitignore
 ├── README.md
@@ -81,14 +76,13 @@ neurofive-ml-track/
 ├── Titanic Logistic Regression/
 │   ├── data/                                # Raw CSVs (gitignored, download separately)
 │   │   └── .gitkeep
-│   └── main.ipynb
+│   └── main.ipynb                           # Notebook containing Tasks 1-3 & Task 5
 └── California Housing Linear Regression/
-    └── main.ipynb
-```
+    └── main.ipynb                           # Notebook containing Task 4
 
 ---
 
-## Titanic Logistic Regression — Detail
+## Titanic Logistic Regression & Hyperparameter Tuning — Detail
 
 ### Data Cleaning & Preprocessing Strategy (Task 2)
 
@@ -103,17 +97,25 @@ neurofive-ml-track/
 * **Socioeconomic Influence (`Pclass`):** Passenger class serves as a strong secondary predictor. First-class passengers achieved higher survival rates due to proximity to the upper deck and priority lifeboat access.
 * **Correlation Highlights:** Strong negative correlation exists between `Pclass` and `Fare`, confirming that higher fare values strongly map to tier 1 accommodations.
 
-### Model Implementation & Evaluation (Task 3)
+### Model Implementation & Hyperparameter Tuning (Tasks 3 & 5)
 
 #### Pipeline Steps
 1. **Categorical Encoding:** Converted categorical variables (`Sex`, `Embarked`) using One-Hot Encoding (`pd.get_dummies(drop_first=True)`).
 2. **Train-Test Split:** Partitioned the dataset into 80% training and 20% test subsets using stratified sampling to maintain class proportions.
 3. **Feature Scaling:** Applied `StandardScaler` to normalize continuous distributions (`Age`, `Fare`) prior to training.
-4. **Baseline Algorithm:** Trained a **Logistic Regression** model on scaled features.
+4. **Baseline Algorithm:** Trained a **Logistic Regression** baseline (`C=1.0`).
+5. **Hyperparameter Tuning:** Applied `GridSearchCV` with 5-fold cross-validation searching over `C`: `[0.01, 0.1, 1, 10, 100]` and `solver`: `['liblinear', 'lbfgs']`.
 
-#### Performance & Evaluation
-* **Test Set Accuracy:** **~80%**
-* **Evaluation Metric:** Evaluated using `accuracy_score` and `confusion_matrix`. The model effectively leverages `Sex` and `Pclass` to separate binary survival outcomes with balanced true positive/negative ratios.
+#### Performance & Metrics Comparison
+
+| Metric | Baseline Model (`C=1.0`) | Tuned Model (`C=0.1`, `solver='liblinear'`) |
+| :--- | :--- | :--- |
+| **Accuracy** | **0.8045** | 0.7877 |
+| **Precision** | **0.7931** | 0.7541 |
+| **Recall** | **0.6667** | 0.6667 |
+| **F1-Score** | **0.7244** | 0.7077 |
+
+* **Key Takeaway:** The default Logistic Regression parameters (`C=1.0`) provided the optimal balance on the unseen test set. Applying stronger regularization (`C=0.1`) slightly underfit the training features on this dataset scale, illustrating that hyperparameter tuning does not automatically guarantee higher accuracy on holdout test splits.
 
 ---
 
