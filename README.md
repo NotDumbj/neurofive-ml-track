@@ -1,4 +1,4 @@
-# NeuroFive ML Track — Weeks 1, 2 & 3
+# NeuroFive ML Track — Weeks 1, 2, 3 & 4
 > Machine Learning fundamentals through hands-on projects
 
 This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, and hyperparameter tuning on real-world datasets.
@@ -33,7 +33,7 @@ Binary classification project predicting customer attrition for a telecom provid
 
 Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dataset. Introduces feature engineering (`FamilySize`, `IsAlone`), unified preprocessing (imputation + scaling + encoding in one object), and model persistence via `joblib` for end-to-end inference on raw inputs.
 
-**Task covered:** Task 7 (Week 3)
+**Task covered:** Task 7 (Week 4)
 
 ---
 
@@ -43,7 +43,8 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 |------|-------|---------|-------------|
 | Week 1 | Tasks 1 & 2 | Titanic | EDA, Data Profiling, Outliers & Missing Value Imputation |
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
-| Week 3 | Tasks 5, 6 & 7 | Titanic, Customer Churn & Titanic Pipeline | Beyond Accuracy, GridSearchCV, Business-Driven Churn, sklearn Pipelines & Feature Engineering |
+| Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
+| Week 4 | Task 7 | Titanic Pipeline | sklearn Pipelines, ColumnTransformer, Feature Engineering & Model Persistence |
 
 ---
 
