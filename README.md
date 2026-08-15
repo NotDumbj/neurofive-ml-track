@@ -21,6 +21,13 @@ Linear Regression model predicting California housing prices using scikit-learn'
 
 **Task covered:** Task 4 (Week 2)
 
+### 3. Customer Churn Prediction
+`Customer Churn Prediction/`
+
+Binary classification project predicting customer attrition for a telecom provider using the Telco Customer Churn dataset (7,043 records). Covers business-driven EDA, categorical encoding, class imbalance awareness, Logistic Regression vs. Decision Tree comparison, and feature importance analysis to identify top churn drivers.
+
+**Task covered:** Task 6 (Week 3)
+
 ---
 
 ## Week Overview
@@ -29,7 +36,7 @@ Linear Regression model predicting California housing prices using scikit-learn'
 |------|-------|---------|-------------|
 | Week 1 | Tasks 1 & 2 | Titanic | EDA, Data Profiling, Outliers & Missing Value Imputation |
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
-| Week 3 | Task 5 | Titanic | Beyond Accuracy (Precision, Recall, F1), GridSearchCV Hyperparameter Tuning |
+| Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
 
 ---
 
@@ -77,8 +84,13 @@ neurofive-ml-track/
 │   ├── data/                                # Raw CSVs (gitignored, download separately)
 │   │   └── .gitkeep
 │   └── main.ipynb                           # Notebook containing Tasks 1-3 & Task 5
-└── California Housing Linear Regression/
-    └── main.ipynb                           # Notebook containing Task 4
+├── California Housing Linear Regression/
+│   └── main.ipynb                           # Notebook containing Task 4
+└── Customer Churn Prediction/
+    ├── data/                                # Telco churn CSV (gitignored)
+    │   └── .gitkeep
+    ├── README.md                            # Project-specific documentation
+    └── main.ipynb                           # Notebook containing Task 6
 ```
 ---
 
@@ -135,3 +147,36 @@ neurofive-ml-track/
 ### Performance & Evaluation
 * **RMSE:** **$81,104.84**
 * **R² Score:** **~0.50** — the model explains 49% of the variance in house prices using the selected 4-feature subset. The remaining variance is attributed to factors not included (e.g., proximity to the ocean, property condition).
+
+---
+
+## Customer Churn Prediction — Detail
+
+### Dataset
+* **Source:** Telco Customer Churn dataset (`7,043` records, `21` columns)
+* **Target:** `Churn` (Binary: `1` = churned, `0` = retained)
+* **Class Imbalance:** ~73.5% non-churn vs. ~26.5% churn
+
+### Pipeline Steps (Task 6)
+1. **Data Cleaning:** Coerced whitespace anomalies in `TotalCharges` to numeric, handled missing values, dropped `customerID`.
+2. **Feature Encoding:** Applied One-Hot Encoding (`pd.get_dummies(drop_first=True)`) across all categorical variables (30 features post-encoding).
+3. **Train-Test Split:** 80/20 stratified split (`random_state=42`).
+4. **Feature Scaling:** `StandardScaler` applied for the Logistic Regression pipeline.
+5. **Models Trained:** Logistic Regression (baseline) and Decision Tree (`max_depth=5`).
+
+### Performance & Evaluation
+
+| Metric | Logistic Regression | Decision Tree (`max_depth=5`) |
+| :--- | :--- | :--- |
+| **Accuracy** | **0.8070** | 0.7942 |
+| **Precision** | **0.6584** | 0.6312 |
+| **Recall** | **0.5668** | 0.5401 |
+| **F1-Score** | **0.6092** | 0.5821 |
+
+### Top 3 Churn Drivers (Decision Tree Feature Importances)
+1. **`Contract_Month-to-month`** — strongest predictor of churn.
+2. **`tenure`** — newer accounts show elevated churn risk.
+3. **`MonthlyCharges` / `InternetService_Fiber optic`** — pricing sensitivity and service tier.
+
+### Business Recommendation
+Target month-to-month subscribers in their first year with discounted annual contract offers and proactive onboarding check-ins during the first 90 days.
