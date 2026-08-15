@@ -28,6 +28,13 @@ Binary classification project predicting customer attrition for a telecom provid
 
 **Task covered:** Task 6 (Week 3)
 
+### 4. Titanic ML Pipeline
+`Titanic ML Pipeline/`
+
+Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dataset. Introduces feature engineering (`FamilySize`, `IsAlone`), unified preprocessing (imputation + scaling + encoding in one object), and model persistence via `joblib` for end-to-end inference on raw inputs.
+
+**Task covered:** Task 7 (Week 3)
+
 ---
 
 ## Week Overview
@@ -36,7 +43,7 @@ Binary classification project predicting customer attrition for a telecom provid
 |------|-------|---------|-------------|
 | Week 1 | Tasks 1 & 2 | Titanic | EDA, Data Profiling, Outliers & Missing Value Imputation |
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
-| Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
+| Week 3 | Tasks 5, 6 & 7 | Titanic, Customer Churn & Titanic Pipeline | Beyond Accuracy, GridSearchCV, Business-Driven Churn, sklearn Pipelines & Feature Engineering |
 
 ---
 
@@ -44,7 +51,7 @@ Binary classification project predicting customer attrition for a telecom provid
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`
 * **Version Control:** Git & GitHub
 
 ---
@@ -86,11 +93,14 @@ neurofive-ml-track/
 │   └── main.ipynb                           # Notebook containing Tasks 1-3 & Task 5
 ├── California Housing Linear Regression/
 │   └── main.ipynb                           # Notebook containing Task 4
-└── Customer Churn Prediction/
-    ├── data/                                # Telco churn CSV (gitignored)
-    │   └── .gitkeep
-    ├── README.md                            # Project-specific documentation
-    └── main.ipynb                           # Notebook containing Task 6
+├── Customer Churn Prediction/
+│   ├── data/                                # Telco churn CSV (gitignored)
+│   │   └── .gitkeep
+│   ├── README.md                            # Project-specific documentation
+│   └── main.ipynb                           # Notebook containing Task 6
+└── Titanic ML Pipeline/
+    ├── main.ipynb                           # Notebook containing Task 7
+    └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
 ```
 ---
 
@@ -180,3 +190,32 @@ neurofive-ml-track/
 
 ### Business Recommendation
 Target month-to-month subscribers in their first year with discounted annual contract offers and proactive onboarding check-ins during the first 90 days.
+
+---
+
+## Titanic ML Pipeline — Detail
+
+### Concept
+A **Pipeline** bundles preprocessing steps (imputation, scaling, encoding) and the estimator into a single object, preventing data leakage and eliminating code duplication during training and inference.
+
+### Feature Engineering (Task 7)
+* **`FamilySize`** (`SibSp + Parch + 1`): Captured passenger group dynamics and evacuation priority.
+* **`IsAlone`** (`FamilySize == 1`): Explicitly identified solo travelers with distinct survival probabilities.
+
+### Pipeline Architecture
+1. **Numeric Transformer:** `SimpleImputer(median)` → `StandardScaler` — applied to `Age`, `Fare`, `FamilySize`.
+2. **Categorical Transformer:** `SimpleImputer(most_frequent)` → `OneHotEncoder(drop='first')` — applied to `Pclass`, `Sex`, `Embarked`, `IsAlone`.
+3. **ColumnTransformer** bundles both transformers.
+4. **Full Pipeline:** `ColumnTransformer` → `LogisticRegression(max_iter=1000)`.
+
+### Performance & Evaluation
+
+| Metric | Score |
+| :--- | :--- |
+| **Accuracy** | **0.8156** |
+| **F1-Score** | **0.7402** |
+| **Precision (Survived)** | 0.81 |
+| **Recall (Survived)** | 0.68 |
+
+### Model Persistence
+Exported the complete trained pipeline via `joblib.dump()` as `titanic_pipeline_model.joblib`. The saved artifact accepts raw, un-transformed inputs and handles end-to-end imputation, encoding, scaling, and inference.
