@@ -1,7 +1,7 @@
-# NeuroFive ML Track — Weeks 1, 2, 3 & 4
+# NeuroFive ML Track — Weeks 1, 2, 3, 4 & 5
 > Machine Learning fundamentals through hands-on projects
 
-This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, and hyperparameter tuning on real-world datasets.
+This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, hyperparameter tuning, and imbalanced learning on real-world datasets.
 
 ---
 
@@ -35,6 +35,13 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 
 **Task covered:** Task 7 (Week 4)
 
+### 5. Credit Card Fraud Detection
+`Credit Card Fraud Detection/`
+
+Binary classification on the ULB Credit Card Fraud dataset (284,807 transactions, 99.83% legitimate vs. 0.17% fraud). Demonstrates the accuracy paradox in extreme class imbalance, compares baseline Logistic Regression against class-weighted and SMOTE-resampled strategies, and optimizes for Recall to maximize fraud catch rate.
+
+**Task covered:** Task 9 (Week 5)
+
 ---
 
 ## Week Overview
@@ -45,6 +52,7 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
 | Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
 | Week 4 | Tasks 7 & 8 | Titanic Pipeline & Customer Churn | sklearn Pipelines, ColumnTransformer, Feature Engineering, Model Persistence & Ensemble Learning (Random Forest, XGBoost) |
+| Week 5 | Task 9 | Credit Card Fraud Detection | Extreme Class Imbalance, Accuracy Paradox, SMOTE, Class Weighting, Recall Optimization |
 
 ---
 
@@ -52,7 +60,7 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`, `xgboost`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`, `xgboost`, `imbalanced-learn`
 * **Version Control:** Git & GitHub
 
 ---
@@ -99,6 +107,11 @@ neurofive-ml-track/
 │   │   └── .gitkeep
 │   ├── README.md                            # Project-specific documentation
 │   └── main.ipynb                           # Notebook containing Tasks 6 & 8
+├── Credit Card Fraud Detection/
+│   ├── data/                                # Fraud dataset CSV (gitignored)
+│   │   └── .gitkeep
+│   ├── README.md                            # Project-specific documentation
+│   └── main.ipynb                           # Notebook containing Task 9
 └── Titanic ML Pipeline/
     ├── main.ipynb                           # Notebook containing Task 7
     └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
@@ -233,3 +246,31 @@ A **Pipeline** bundles preprocessing steps (imputation, scaling, encoding) and t
 
 ### Model Persistence
 Exported the complete trained pipeline via `joblib.dump()` as `titanic_pipeline_model.joblib`. The saved artifact accepts raw, un-transformed inputs and handles end-to-end imputation, encoding, scaling, and inference.
+
+---
+
+## Credit Card Fraud Detection — Detail
+
+### Dataset
+* **Source:** ULB Credit Card Fraud Detection (`284,807` transactions, `31` columns)
+* **Target:** `Class` (`0` = Legitimate, `1` = Fraud)
+* **Extreme Imbalance:** `284,315` legitimate (99.83%) vs. `492` fraudulent (0.17%)
+
+### Pipeline Steps (Task 9)
+1. **Feature Scaling:** Applied `RobustScaler` to `Time` and `Amount` to handle extreme financial distribution outliers.
+2. **Data Leakage Mitigation:** Stratified splitting performed *before* oversampling — SMOTE applied strictly to the training partition.
+3. **Models Trained:** Baseline Logistic Regression, Class-Weighted (`class_weight='balanced'`), and SMOTE-resampled Logistic Regression.
+
+### Performance & Evaluation
+
+| Metric | Baseline | Class-Weighted (`balanced`) | SMOTE Resampled |
+| :--- | :--- | :--- | :--- |
+| **Accuracy** | 0.9992 | 0.9763 | 0.9748 |
+| **Precision** | **0.8611** | 0.0632 | 0.0598 |
+| **Recall (Fraud Catch Rate)** | 0.6327 | **0.9082** | **0.8980** |
+| **F1-Score** | **0.7294** | 0.1182 | 0.1121 |
+
+### Key Takeaways
+* **The Accuracy Paradox:** The baseline model scored 99.92% accuracy, yet missed ~37% of all fraudulent transactions.
+* **Business Priority (Recall):** Financial institutions accept higher False Positives in exchange for catching >90% of actual fraud via class weighting and SMOTE.
+* **Algorithmic vs. Synthetic Resampling:** `class_weight='balanced'` achieved the highest fraud capture rate without the computational overhead of synthesizing thousands of synthetic data vectors.
