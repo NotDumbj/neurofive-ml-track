@@ -24,9 +24,9 @@ Linear Regression model predicting California housing prices using scikit-learn'
 ### 3. Customer Churn Prediction
 `Customer Churn Prediction/`
 
-Binary classification project predicting customer attrition for a telecom provider using the Telco Customer Churn dataset (7,043 records). Covers business-driven EDA, categorical encoding, class imbalance awareness, Logistic Regression vs. Decision Tree comparison, and feature importance analysis to identify top churn drivers.
+Binary classification project predicting customer attrition for a telecom provider using the Telco Customer Churn dataset (7,043 records). Covers business-driven EDA, categorical encoding, class imbalance awareness, Logistic Regression vs. Decision Tree comparison, feature importance analysis to identify top churn drivers, and ensemble learning with Random Forest and XGBoost.
 
-**Task covered:** Task 6 (Week 3)
+**Tasks covered:** Task 6 (Week 3), Task 8 (Week 4)
 
 ### 4. Titanic ML Pipeline
 `Titanic ML Pipeline/`
@@ -44,7 +44,7 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 | Week 1 | Tasks 1 & 2 | Titanic | EDA, Data Profiling, Outliers & Missing Value Imputation |
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
 | Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
-| Week 4 | Task 7 | Titanic Pipeline | sklearn Pipelines, ColumnTransformer, Feature Engineering & Model Persistence |
+| Week 4 | Tasks 7 & 8 | Titanic Pipeline & Customer Churn | sklearn Pipelines, ColumnTransformer, Feature Engineering, Model Persistence & Ensemble Learning (Random Forest, XGBoost) |
 
 ---
 
@@ -52,7 +52,7 @@ Production-style sklearn `Pipeline` with `ColumnTransformer` for the Titanic dat
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`, `xgboost`
 * **Version Control:** Git & GitHub
 
 ---
@@ -98,7 +98,7 @@ neurofive-ml-track/
 │   ├── data/                                # Telco churn CSV (gitignored)
 │   │   └── .gitkeep
 │   ├── README.md                            # Project-specific documentation
-│   └── main.ipynb                           # Notebook containing Task 6
+│   └── main.ipynb                           # Notebook containing Tasks 6 & 8
 └── Titanic ML Pipeline/
     ├── main.ipynb                           # Notebook containing Task 7
     └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
@@ -191,6 +191,19 @@ neurofive-ml-track/
 
 ### Business Recommendation
 Target month-to-month subscribers in their first year with discounted annual contract offers and proactive onboarding check-ins during the first 90 days.
+
+### Ensemble Learning: Random Forest vs. XGBoost (Task 8)
+
+Extended the baseline models with two ensemble architectures to evaluate performance lift on the same churn dataset.
+
+| Model | Accuracy | Precision | Recall | F1-Score |
+| :--- | :--- | :--- | :--- | :--- |
+| Logistic Regression | ~0.8041 | ~0.6552 | ~0.5374 | ~0.5907 |
+| Random Forest | ~0.8062 | ~0.6725 | ~0.5134 | ~0.5823 |
+| **XGBoost** | **~0.8112** | **~0.6844** | **~0.5401** | **~0.6036** |
+
+* **XGBoost** achieved the best overall F1-score and accuracy through sequential gradient boosting.
+* **Bagging vs. Boosting:** Random Forest averages independent decision trees to reduce variance, while XGBoost sequentially trains trees to minimize the residual errors of earlier trees.
 
 ---
 

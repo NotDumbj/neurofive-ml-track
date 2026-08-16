@@ -66,6 +66,24 @@ Using the Decision Tree model's feature importance attributes, the top 3 drivers
 
 ---
 
+## 🌲 Ensemble Learning: Random Forest vs. XGBoost (Task 8)
+
+This project compares single baseline models (Logistic Regression / Decision Trees) against advanced ensemble architectures (Random Forest and XGBoost) on Customer Churn data.
+
+### Model Comparison Table
+
+| Model | Accuracy | Precision | Recall | F1-Score |
+| :--- | :--- | :--- | :--- | :--- |
+| **Logistic Regression** | ~0.8041 | ~0.6552 | ~0.5374 | ~0.5907 |
+| **Random Forest** | ~0.8062 | ~0.6725 | ~0.5134 | ~0.5823 |
+| **XGBoost** | **~0.8112** | **~0.6844** | **~0.5401** | **~0.6036** |
+
+### Key Takeaways
+1. **Performance Lift:** XGBoost achieved the best overall F1-score and accuracy through sequential gradient boosting.
+2. **Bagging vs. Boosting:** Random Forest averages independent decision trees to reduce variance, while XGBoost sequentially trains trees to minimize the residual errors of earlier trees.
+
+---
+
 ## 🚀 Getting Started Locally
 
 ### 1. Set Up Environment & Run
