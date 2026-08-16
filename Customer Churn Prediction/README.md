@@ -72,15 +72,19 @@ This project compares single baseline models (Logistic Regression / Decision Tre
 
 ### Model Comparison Table
 
-| Model | Accuracy | Precision | Recall | F1-Score |
-| :--- | :--- | :--- | :--- | :--- |
-| **Logistic Regression** | ~0.8041 | ~0.6552 | ~0.5374 | ~0.5907 |
-| **Random Forest** | ~0.8062 | ~0.6725 | ~0.5134 | ~0.5823 |
-| **XGBoost** | **~0.8112** | **~0.6844** | **~0.5401** | **~0.6036** |
+| Metric | Logistic Regression | Random Forest | XGBoost |
+| :--- | :--- | :--- | :--- |
+| **Accuracy** | **0.8070** | 0.7935 | 0.8034 |
+| **Precision** | 0.6584 | **0.6694** | 0.6633 |
+| **Recall** | **0.5668** | 0.4385 | 0.5267 |
+| **F1-Score** | **0.6092** | 0.5299 | 0.5872 |
 
 ### Key Takeaways
-1. **Performance Lift:** XGBoost achieved the best overall F1-score and accuracy through sequential gradient boosting.
-2. **Bagging vs. Boosting:** Random Forest averages independent decision trees to reduce variance, while XGBoost sequentially trains trees to minimize the residual errors of earlier trees.
+1. **Baseline Strength:** Linear Logistic Regression achieved the highest overall Accuracy (0.8070), Recall (0.5668), and F1-Score (0.6092), proving that simpler linear decision boundaries can outperform complex non-linear ensemble models when features have mostly linear relationships with the target.
+2. **Precision vs. Recall Trade-off:** While Random Forest achieved the highest Precision (0.6694), it suffered from a significantly lower Recall (0.4385), missing over half of all churning customers.
+3. **Bagging vs. Boosting Architecture:**
+   * **Random Forest (Bagging):** Averages predictions from multiple independently trained decision trees in parallel to reduce model variance.
+   * **XGBoost (Boosting):** Builds trees sequentially, where each consecutive tree is trained to correct the residual errors made by earlier trees.
 
 ---
 
