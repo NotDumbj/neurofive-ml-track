@@ -42,6 +42,13 @@ Binary classification on the ULB Credit Card Fraud dataset (284,807 transactions
 
 **Task covered:** Task 9 (Week 5)
 
+### 6. Titanic Survival Prediction App
+`titanic-streamlit-app/`
+
+Interactive Streamlit web application that serves the trained Titanic pipeline model (from Task 7) as a user-facing prediction tool. Users input passenger details (class, sex, age, fare, embarkation port, family info) through an intuitive form, and the app returns a survival prediction with probability score — demonstrating end-to-end ML model deployment.
+
+**Task covered:** Task 10 (Week 5)
+
 ---
 
 ## Week Overview
@@ -52,7 +59,7 @@ Binary classification on the ULB Credit Card Fraud dataset (284,807 transactions
 | Week 2 | Tasks 3 & 4 | Titanic & California Housing | One-Hot Encoding, Logistic Regression, Linear Regression (RMSE & R²) |
 | Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
 | Week 4 | Tasks 7 & 8 | Titanic Pipeline & Customer Churn | sklearn Pipelines, ColumnTransformer, Feature Engineering, Model Persistence & Ensemble Learning (Random Forest, XGBoost) |
-| Week 5 | Task 9 | Credit Card Fraud Detection | Extreme Class Imbalance, Accuracy Paradox, SMOTE, Class Weighting, Recall Optimization |
+| Week 5 | Tasks 9 & 10 | Credit Card Fraud Detection & Titanic Streamlit App | Extreme Class Imbalance, SMOTE, Recall Optimization & ML Model Deployment with Streamlit |
 
 ---
 
@@ -60,7 +67,7 @@ Binary classification on the ULB Credit Card Fraud dataset (284,807 transactions
 
 * **Language:** Python 3.12
 * **Environment:** Jupyter Notebook / Virtual Environment (`venv`)
-* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`, `xgboost`, `imbalanced-learn`
+* **Libraries:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `joblib`, `xgboost`, `imbalanced-learn`, `streamlit`
 * **Version Control:** Git & GitHub
 
 ---
@@ -112,6 +119,10 @@ neurofive-ml-track/
 │   │   └── .gitkeep
 │   ├── README.md                            # Project-specific documentation
 │   └── main.ipynb                           # Notebook containing Task 9
+├── titanic-streamlit-app/
+│   ├── app.py                               # Streamlit web app (Task 10)
+│   ├── requirements.txt                     # App dependencies
+│   └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
 └── Titanic ML Pipeline/
     ├── main.ipynb                           # Notebook containing Task 7
     └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
@@ -274,3 +285,24 @@ Exported the complete trained pipeline via `joblib.dump()` as `titanic_pipeline_
 * **The Accuracy Paradox:** The baseline model scored 99.92% accuracy, yet missed ~37% of all fraudulent transactions.
 * **Business Priority (Recall):** Financial institutions accept higher False Positives in exchange for catching >90% of actual fraud via class weighting and SMOTE.
 * **Algorithmic vs. Synthetic Resampling:** `class_weight='balanced'` achieved the highest fraud capture rate without the computational overhead of synthesizing thousands of synthetic data vectors.
+
+---
+
+## Titanic Survival Prediction App — Detail
+
+### Concept
+Task 10 bridges the gap from notebook-based ML to a **deployed, user-facing application**. The saved sklearn Pipeline from Task 7 is loaded and served through Streamlit, allowing non-technical users to interact with the model via a browser.
+
+### Architecture (Task 10)
+1. **Model Loading:** `joblib.load()` loads the full Pipeline artifact (imputation + encoding + scaling + Logistic Regression) with `@st.cache_resource` for single-load caching.
+2. **Input Form:** Two-column layout collecting `Pclass`, `Sex`, `Age`, `Fare`, `Embarked`, `SibSp`, and `Parch`.
+3. **Feature Engineering:** `FamilySize` and `IsAlone` computed on-the-fly from user inputs, matching the pipeline's expected schema.
+4. **Prediction:** Raw inputs are passed as a DataFrame directly into the pipeline — all preprocessing happens inside the saved artifact.
+5. **Output:** Survival prediction displayed as a success/error card with the predicted probability percentage.
+
+### How to Run
+```bash
+cd titanic-streamlit-app
+pip install -r requirements.txt
+streamlit run app.py
+```
