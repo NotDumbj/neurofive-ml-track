@@ -12,7 +12,9 @@ st.set_page_config(
 # Load the saved Pipeline model
 @st.cache_resource
 def load_model():
-    return joblib.load('titanic_pipeline_model.joblib')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, 'titanic_pipeline_model.joblib')
+    return joblib.load(model_path)
 
 model = load_model()
 
