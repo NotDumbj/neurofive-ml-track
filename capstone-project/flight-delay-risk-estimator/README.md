@@ -1,5 +1,7 @@
 # ✈️ Flight Delay Risk Estimator
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://flight-delay-risk-estimator-cap.streamlit.app)
+
 An end-to-end machine learning project that estimates the probability a US
 domestic flight will arrive **15+ minutes late**, based on airline, route,
 scheduled time, and seasonality. Built as a capstone project for the
@@ -102,6 +104,8 @@ streamlit run app.py
 Then open the local URL Streamlit prints (typically `http://localhost:8501`),
 pick an airline, route, date, and departure hour, and get a live delay-risk
 estimate.
+
+Or try the deployed version: **https://flight-delay-risk-estimator-cap.streamlit.app**
 
 ## Limitations & Future Work
 

@@ -5,6 +5,15 @@ This repository contains projects from the NeuroFive ML track, covering supervis
 
 ---
 
+## Live Demos
+
+| App | Link |
+|-----|------|
+| **Flight Delay Risk Estimator** (Capstone) | [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://flight-delay-risk-estimator-cap.streamlit.app) |
+| **Titanic Survival Prediction** | [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://titanic-ml-track.streamlit.app) |
+
+---
+
 ## Projects
 
 ### 1. Titanic Logistic Regression & Model Tuning
@@ -43,14 +52,14 @@ Binary classification on the ULB Credit Card Fraud dataset (284,807 transactions
 **Task covered:** Task 9 (Week 5)
 
 ### 6. Titanic Survival Prediction App
-`titanic-streamlit-app/`
+`titanic-streamlit-app/` · **[Live App](https://titanic-ml-track.streamlit.app)**
 
 Interactive Streamlit web application that serves the trained Titanic pipeline model (from Task 7) as a user-facing prediction tool. Users input passenger details (class, sex, age, fare, embarkation port, family info) through an intuitive form, and the app returns a survival prediction with probability score — demonstrating end-to-end ML model deployment.
 
 **Task covered:** Task 10 (Week 5)
 
 ### 7. Flight Delay Risk Estimator (Capstone)
-`Capstone Project/Flight Delay Risk Estimator/`
+`capstone-project/flight-delay-risk-estimator/` · **[Live App](https://flight-delay-risk-estimator-cap.streamlit.app)**
 
 End-to-end capstone project estimating the probability a US domestic flight arrives 15+ minutes late. Covers full-cycle ML: EDA on 150K flight records, feature engineering (smoothed route delay rates, calendar/seasonal features, distance tiers), benchmarking Logistic Regression vs. Random Forest vs. XGBoost with class-weighted pipelines, F1-optimal threshold tuning, and deployment as an interactive Streamlit risk-scoring app.
 
@@ -130,12 +139,13 @@ neurofive-ml-track/
 ├── titanic-streamlit-app/
 │   ├── app.py                               # Streamlit web app (Task 10)
 │   ├── requirements.txt                     # App dependencies
+│   ├── README.md                            # Project-specific documentation
 │   └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
 └── Titanic ML Pipeline/
     ├── main.ipynb                           # Notebook containing Task 7
     └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
-└── Capstone Project/
-    └── Flight Delay Risk Estimator/
+└── capstone-project/
+    └── flight-delay-risk-estimator/
         ├── data/                            # Raw flight data CSV (gitignored)
         ├── eda_and_training.ipynb            # EDA + model benchmarking notebook
         ├── app.py                           # Streamlit risk-scoring app
@@ -324,6 +334,8 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+Or try it live: **https://titanic-ml-track.streamlit.app**
+
 ---
 
 ## Flight Delay Risk Estimator (Capstone) — Detail
@@ -365,7 +377,9 @@ The champion model, route-rate lookup table, and dropdown option lists are bundl
 
 ### How to Run
 ```bash
-cd "Capstone Project/Flight Delay Risk Estimator"
+cd "capstone-project/flight-delay-risk-estimator"
 pip install -r requirements.txt
 streamlit run app.py
 ```
+
+Or try it live: **https://flight-delay-risk-estimator-cap.streamlit.app**

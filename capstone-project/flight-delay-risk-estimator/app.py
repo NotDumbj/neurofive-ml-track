@@ -10,11 +10,13 @@ Run:
 
 import datetime as dt
 
+import os
 import joblib
 import pandas as pd
 import streamlit as st
 
-ARTIFACT_PATH = "model_artifacts.joblib"
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+ARTIFACT_PATH = os.path.join(APP_DIR, "model_artifacts.joblib")
 
 st.set_page_config(page_title="Flight Delay Risk Estimator", page_icon="✈️", layout="centered")
 
