@@ -1,7 +1,7 @@
-# NeuroFive ML Track — Weeks 1, 2, 3, 4 & 5
+# NeuroFive ML Track — Weeks 1, 2, 3, 4, 5 & 6
 > Machine Learning fundamentals through hands-on projects
 
-This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, hyperparameter tuning, and imbalanced learning on real-world datasets.
+This repository contains projects from the NeuroFive ML track, covering supervised learning techniques, regression modeling, advanced classification evaluation, hyperparameter tuning, imbalanced learning, and an end-to-end capstone project on real-world datasets.
 
 ---
 
@@ -49,6 +49,13 @@ Interactive Streamlit web application that serves the trained Titanic pipeline m
 
 **Task covered:** Task 10 (Week 5)
 
+### 7. Flight Delay Risk Estimator (Capstone)
+`Capstone Project/Flight Delay Risk Estimator/`
+
+End-to-end capstone project estimating the probability a US domestic flight arrives 15+ minutes late. Covers full-cycle ML: EDA on 150K flight records, feature engineering (smoothed route delay rates, calendar/seasonal features, distance tiers), benchmarking Logistic Regression vs. Random Forest vs. XGBoost with class-weighted pipelines, F1-optimal threshold tuning, and deployment as an interactive Streamlit risk-scoring app.
+
+**Task covered:** Task 11 — Capstone Project (Week 6)
+
 ---
 
 ## Week Overview
@@ -60,6 +67,7 @@ Interactive Streamlit web application that serves the trained Titanic pipeline m
 | Week 3 | Tasks 5 & 6 | Titanic & Customer Churn | Beyond Accuracy (Precision, Recall, F1), GridSearchCV, Business-Driven Churn Prediction |
 | Week 4 | Tasks 7 & 8 | Titanic Pipeline & Customer Churn | sklearn Pipelines, ColumnTransformer, Feature Engineering, Model Persistence & Ensemble Learning (Random Forest, XGBoost) |
 | Week 5 | Tasks 9 & 10 | Credit Card Fraud Detection & Titanic Streamlit App | Extreme Class Imbalance, SMOTE, Recall Optimization & ML Model Deployment with Streamlit |
+| Week 6 | Task 11 | Flight Delay Risk Estimator (Capstone) | End-to-End ML Project: EDA, Feature Engineering, Model Benchmarking, Threshold Tuning & Streamlit Deployment |
 
 ---
 
@@ -126,6 +134,15 @@ neurofive-ml-track/
 └── Titanic ML Pipeline/
     ├── main.ipynb                           # Notebook containing Task 7
     └── titanic_pipeline_model.joblib        # Saved sklearn Pipeline artifact
+└── Capstone Project/
+    └── Flight Delay Risk Estimator/
+        ├── data/                            # Raw flight data CSV (gitignored)
+        ├── eda_and_training.ipynb            # EDA + model benchmarking notebook
+        ├── app.py                           # Streamlit risk-scoring app
+        ├── model_artifacts.joblib           # Saved pipeline + route lookups
+        ├── case_study.md                    # Non-technical project summary
+        ├── requirements.txt                 # Project dependencies
+        └── README.md                        # Project-specific documentation
 ```
 ---
 
@@ -303,6 +320,52 @@ Task 10 bridges the gap from notebook-based ML to a **deployed, user-facing appl
 ### How to Run
 ```bash
 cd titanic-streamlit-app
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+---
+
+## Flight Delay Risk Estimator (Capstone) — Detail
+
+### Problem Statement
+Travelers booking a flight typically see a carrier's overall on-time percentage at best — a single number that ignores the specific route, date, season, and departure hour. This capstone project builds a lightweight risk-scoring model that estimates the probability a specific US domestic flight will arrive **15+ minutes late** (FAA standard), giving travelers or travel apps a personalized, actionable risk signal at booking time.
+
+### Dataset
+* **Source:** US domestic flight records (~150,000 rows, 32 columns)
+* **Target:** `IS_DELAYED` = 1 if arrival delay ≥ 15 minutes
+* **Class Imbalance:** ~81.5% on-time vs. ~18.4% delayed (after cleaning)
+
+### Feature Engineering (Task 11)
+* **Calendar features:** Month, day of week, weekend flag, peak-season flag (Jun–Aug, Nov–Dec)
+* **Scheduled departure hour:** Extracted from `CRS_DEP_TIME`
+* **Distance tier:** Short/Medium/Long haul via binning
+* **Smoothed route delay rate:** Target-encoded `ORIGIN → DEST` historical delay rate, shrunk toward the global average for low-volume routes to prevent overfitting
+* **Cardinality control:** Filtered to top 20 origin airports, top 20 destination airports, and top 10 carriers by volume
+
+### Modeling Pipeline
+Benchmarked three classifiers inside a single `scikit-learn` `Pipeline` (median/most-frequent imputation → scaling / one-hot encoding → classifier), with class weighting to handle the ~82/18 imbalance:
+1. **Logistic Regression** (baseline, `class_weight='balanced'`)
+2. **Random Forest** (`class_weight='balanced'`)
+3. **XGBoost** (`scale_pos_weight` tuned to the imbalance ratio)
+
+### Performance & Evaluation
+
+| Model               | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
+|---------------------|---------:|----------:|-------:|---------:|--------:|
+| Logistic Regression | 0.5931   | 0.2367    | 0.5422 | 0.3296   | 0.6035  |
+| Random Forest        | 0.6367   | 0.2500    | 0.4846 | 0.3298   | 0.6140  |
+| XGBoost              | 0.6403   | 0.2531    | 0.4866 | 0.3330   | 0.6094  |
+
+* **Champion model:** Random Forest (selected by highest ROC-AUC: 0.6140)
+* **Honest assessment:** ROC-AUC in the 0.60–0.62 range is modest — meaningfully better than guessing but far from precise. Flight delays are driven heavily by same-day weather, ATC conditions, and mechanical issues, none of which are in this dataset.
+
+### Deployment
+The champion model, route-rate lookup table, and dropdown option lists are bundled into a single `joblib` artifact and served through a **Streamlit app**. The app returns a delay probability, a binary Delayed/On-time call using an F1-optimal decision threshold, and a Low/Medium/High risk bucket — framing the model as a risk-flagging tool rather than a hard prediction.
+
+### How to Run
+```bash
+cd "Capstone Project/Flight Delay Risk Estimator"
 pip install -r requirements.txt
 streamlit run app.py
 ```
