@@ -9,12 +9,18 @@ Run:
 """
 
 import datetime as dt
-
 import os
+
 import joblib
 import pandas as pd
 import streamlit as st
 
+# Resolve relative to this script's own folder, not the process's current
+# working directory. Streamlit Community Cloud launches the app from the
+# REPO ROOT even when app.py lives in a subfolder, so a plain relative path
+# like "model_artifacts.joblib" looks in the wrong place there (even though
+# it works locally, since locally you happen to run streamlit from inside
+# this same folder).
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 ARTIFACT_PATH = os.path.join(APP_DIR, "model_artifacts.joblib")
 
@@ -24,6 +30,21 @@ st.set_page_config(page_title="Flight Delay Risk Estimator", page_icon="✈️",
 @st.cache_resource
 def load_artifact():
     return joblib.load(ARTIFACT_PATH)
+
+
+def lookup_route_distance(artifact, origin, dest):
+    """
+    Look up the real historical distance for this route. Distance is
+    symmetric (BOS->ATL is the same physical distance as ATL->BOS), so the
+    lookup key ignores direction. Falls back to the dataset-wide average for
+    any origin/destination combination that never appeared in training data.
+    """
+    key = "_".join(sorted([origin, dest]))
+    distance = artifact["route_distances"].get(key)
+    is_estimated = distance is None
+    if is_estimated:
+        distance = artifact["avg_distance"]
+    return distance, is_estimated
 
 
 def engineer_features(artifact, airline, origin, dest, flight_date, dep_hour, distance):
@@ -85,19 +106,25 @@ def main():
         )
         st.stop()
 
-    with st.form("flight_form"):
-        col1, col2 = st.columns(2)
-        with col1:
-            airline = st.selectbox("Airline", options=artifact["top_carriers"])
-            origin = st.selectbox("Origin airport", options=artifact["top_airports"])
-            flight_date = st.date_input("Flight date", value=dt.date.today())
-        with col2:
-            dest_options = [d for d in artifact["top_destinations"] if d != origin] or artifact["top_destinations"]
-            dest = st.selectbox("Destination airport", options=dest_options)
-            dep_hour = st.slider("Scheduled departure hour (24h)", 0, 23, 9)
-            distance = st.number_input("Route distance (miles)", min_value=50, max_value=6000, value=800, step=50)
+    col1, col2 = st.columns(2)
+    with col1:
+        airline = st.selectbox("Airline", options=artifact["top_carriers"])
+        origin = st.selectbox("Origin airport", options=artifact["top_airports"])
+        flight_date = st.date_input("Flight date", value=dt.date.today())
+    with col2:
+        dest_options = [d for d in artifact["top_destinations"] if d != origin] or artifact["top_destinations"]
+        dest = st.selectbox("Destination airport", options=dest_options)
+        dep_hour = st.slider("Scheduled departure hour (24h)", 0, 23, 9)
 
-        submitted = st.form_submit_button("Estimate delay risk", use_container_width=True)
+    # Distance is a physical fact of the chosen route, not something the user
+    # should be typing in — compute it from historical data for this route so
+    # it can never contradict the airports actually selected.
+    distance, is_estimated = lookup_route_distance(artifact, origin, dest)
+    distance_tier = pd.cut([distance], bins=artifact["distance_tier_bins"], labels=artifact["distance_tier_labels"])[0]
+    estimated_note = " — *no historical flights for this exact pair, using dataset average*" if is_estimated else ""
+    st.caption(f"📏 Route distance: **{distance:,.0f} miles** ({distance_tier}){estimated_note}")
+
+    submitted = st.button("Estimate delay risk", use_container_width=True)
 
     if submitted:
         if origin == dest:
